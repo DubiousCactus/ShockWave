@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1483490184 source:/home/transpalette/Documents/Programming/ShockWave/main.cpp
+	<tins/tins.h>
+	<cassert>
+	<iostream>
+	<string>
+	<unistd.h>
+
+1483490544 source:/home/transpalette/Documents/Programming/ShockWave/src/Deauther.cpp
+	"Deauther.h"
+
+1483490544 /home/transpalette/Documents/Programming/ShockWave/include/Deauther.h
+
