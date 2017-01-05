@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-    CLI cli = CLI();
+    CLI cli;
     cli.mainLoop();
 
     return 0;

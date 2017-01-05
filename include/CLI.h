@@ -1,10 +1,10 @@
 #ifndef CLI_H
 #define CLI_H
 
-#include <tins/tins.h>
 #include <string>
 #include <unistd.h>
 #include <cassert>
+#include <Network.h>
 
 
 class CLI
@@ -14,13 +14,17 @@ class CLI
         WHITELIST,
         ATTACK
     };
+
     public:
         CLI();
         virtual ~CLI();
         void mainLoop();
+
     protected:
+
     private:
         State state;
+        Network network;
         void showMenu();
         void showHeader();
         void showAction();

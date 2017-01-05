@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1483536875 source:/home/transpalette/Documents/Programming/ShockWave/main.cpp
+1483641758 source:/home/transpalette/Documents/Programming/ShockWave/main.cpp
 	<iostream>
 	<CLI.h>
 
@@ -8,9 +8,18 @@
 
 1483490544 /home/transpalette/Documents/Programming/ShockWave/include/Deauther.h
 
-1483536713 /home/transpalette/Documents/Programming/ShockWave/include/CLI.h
-	<tins/tins.h>
+1483641675 /home/transpalette/Documents/Programming/ShockWave/include/CLI.h
 	<string>
 	<unistd.h>
 	<cassert>
+	<Network.h>
+
+1483628794 /home/transpalette/Documents/Programming/ShockWave/include/Network.h
+	<tins/tins.h>
+
+1483641359 source:/home/transpalette/Documents/Programming/ShockWave/src/CLI.cpp
+	"CLI.h"
+
+1483641419 source:/home/transpalette/Documents/Programming/ShockWave/src/Network.cpp
+	"Network.h"
 
