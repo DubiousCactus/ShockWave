@@ -9,8 +9,13 @@ class Network
         Network();
         virtual ~Network();
         void sendDeauth();
+        std::vector<std::wstring> getInterfaces();
+        void setInterface(std::string interface);
+
     protected:
+
     private:
+        Tins::NetworkInterface iface;
         Tins::PacketSender sender;
         Tins::HWAddress<6> bssid;
         Tins::HWAddress<6> target;

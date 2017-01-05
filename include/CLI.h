@@ -5,7 +5,10 @@
 #include <unistd.h>
 #include <cassert>
 #include <Network.h>
-
+#include <clocale>
+#include <locale>
+#include <vector>
+#include <codecvt>
 
 class CLI
 {
@@ -25,10 +28,12 @@ class CLI
     private:
         State state;
         Network network;
+        std::vector<std::wstring> interfaces;
         void showMenu();
         void showHeader();
         void showAction();
         void listInterfaces();
+        void chooseInterface(int no);
         void attack();
 };
 
