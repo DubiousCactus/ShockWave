@@ -1,0 +1,4 @@
+/home/transpalette/clion-2016.3.2/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/transpalette/Programming/CLionProjects/ShockWave
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug
