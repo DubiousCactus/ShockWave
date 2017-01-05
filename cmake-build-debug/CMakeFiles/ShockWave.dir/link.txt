@@ -1,0 +1,1 @@
+/usr/bin/c++   -g   CMakeFiles/ShockWave.dir/src/CLI.cpp.o CMakeFiles/ShockWave.dir/main.cpp.o  -o ShockWave 

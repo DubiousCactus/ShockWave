@@ -1,0 +1,3 @@
+/home/transpalette/Documents/Programming/ShockWave/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/transpalette/Documents/Programming/ShockWave/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/transpalette/Documents/Programming/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir
