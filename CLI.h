@@ -34,6 +34,7 @@ class CLI
         Network network;
         std::vector<std::wstring> interfaces;
         std::map<std::string, address_type> aps;
+        std::vector<std::string> targets;
         void showMenu();
         void showHeader();
         void showAction();

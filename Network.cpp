@@ -5,7 +5,7 @@ using namespace Tins;
 
 Network::Network()
 {
-    iface = NetworkInterface::default_interface();
+    ifaceName = "wlan0";
     bssid = HWAddress<6>("00:00:00:00:00:00"); //Router
     target = HWAddress<6>("40:b4:cd:6e:de:d5"); //Amazon Fire
     deauthPacket = Dot11Deauthentication(target, bssid); //Set target / sender
@@ -19,7 +19,7 @@ Network::~Network()
 }
 
 void Network::sendDeauth() {
-    sender.send(radio, "wlp2s0");
+    sender.send(radio, ifaceName);
 }
 
 std::vector<std::wstring> Network::getInterfaces() {
@@ -35,9 +35,20 @@ std::vector<std::wstring> Network::getInterfaces() {
 }
 
 std::vector<std::string> Network::getConnectedDevices() {
-    std::vector<std::string> devicesNames;
+    std::vector<std::string> targets;
+    NetworkInterface iface = NetworkInterface(ifaceName);
+    NetworkInterface::Info infoScanner = iface.info();
+    // Do ARP Scanning to all IP range addresses.
+    for (const auto &target : networkRange) {
+        EthernetII scan = ARP::make_arp_request(target, infoScanner.ip_addr, infoScanner.hw_addr);
+        std::unique_ptr<PDU> reply(sender.send_recv(scan, iface));
+        if (reply) {
+            targets.push_back((reply->rfind_pdu<ARP>()).sender_hw_addr().to_string());
+            std::cout << "Target found : [" << target << " / " << targets.back() << " ]" << std::endl;
+        }
+    }
 
-    return devicesNames;
+    return targets;
 }
 
 std::map<std::string, Dot11::address_type> Network::getAccessPoints() {
@@ -47,14 +58,8 @@ std::map<std::string, Dot11::address_type> Network::getAccessPoints() {
     config.set_filter("type mgt subtype beacon");
     config.set_rfmon(true);
 
-    //setup converter
-    using convert_type = std::codecvt_utf8<wchar_t>;
-    std::wstring_convert<convert_type, wchar_t> converter;
-    //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
-    std::string ifaceName = converter.to_bytes(iface.friendly_name());
-
     Sniffer sniffer(ifaceName, config);
-    sniffer.set_timeout(5000);
+    sniffer.set_timeout(1000);
     sniffer.sniff_loop(make_sniffer_handler(this, &Network::scanCallback));
     sniffer.stop_sniff();
 
@@ -80,8 +85,10 @@ bool Network::scanCallback(PDU &pdu) {
                 // Save it so we don't show it again.
                 ssids.insert(addr);
                 // Display the tuple "address - ssid".
-                std::cout << accessPoints.size() + 1 << " -> " << addr << " - " << ssid << std::endl;
-                accessPoints.insert(std::pair<std::string, address_type>(ssid, addr));
+                if(!ssid.empty()) {
+                    std::cout << accessPoints.size() + 1 << " -> " << addr << " - " << ssid << std::endl;
+                    accessPoints.insert(std::pair<std::string, address_type>(ssid, addr));
+                }
             } catch (std::runtime_error&) {
                 // No ssid, just ignore it.
             }
@@ -92,7 +99,7 @@ bool Network::scanCallback(PDU &pdu) {
 }
 
 void Network::setInterface(std::string interface) {
-    iface = NetworkInterface(interface);
+    ifaceName = interface;
 }
 
 void Network::setBssid(const std::string hwAddress) {

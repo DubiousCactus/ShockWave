@@ -11,10 +11,11 @@ class Network
     private:
         ssids_type ssids;
         std::map<std::string, address_type> accessPoints;
-        Tins::NetworkInterface iface;
+        std::string ifaceName;
         Tins::PacketSender sender;
         Tins::HWAddress<6> bssid;
         Tins::HWAddress<6> target;
+        Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask("10.10.10.0", "10.10.10.0");
         Tins::Dot11Deauthentication deauthPacket;
         Tins::RadioTap radio;
         bool scanCallback(Tins::PDU& pdu);

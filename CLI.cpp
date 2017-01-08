@@ -27,11 +27,7 @@ void CLI::showHeader() {
 }
 
 void CLI::listConnectedHosts() {
-    vector<string> hosts = network.getConnectedDevices();
-
-    for (const string& host : hosts) {
-        cout << " -> " << host << endl;
-    }
+    targets = network.getConnectedDevices();
 }
 
 void CLI::listInterfaces() {
@@ -56,14 +52,12 @@ void CLI::chooseInterface(int no) {
 
     //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
     string iface = converter.to_bytes(w_iface);
-    cout<<iface<<endl;
     network.setInterface(iface);
 }
 
 void CLI::chooseAccessPoint(int no) {
     int i = 1;
     for(map<string, address_type>::iterator iterator = aps.begin(); iterator != aps.end(); iterator++, i++) {
-        cout << iterator->second.to_string() <<endl;
         if(i == no) {
             network.setBssid(iterator->second.to_string());
             break;
@@ -88,6 +82,7 @@ void CLI::showAction() {
             cin >> ap;
             chooseAccessPoint(ap);
             state = LISTHOSTS;
+            break;
         case LISTHOSTS:
             listConnectedHosts();
             state = WHITELIST;
@@ -112,7 +107,7 @@ void CLI::showMenu() {
 void CLI::attack() {
 
     cout << "-> BSSID: " << network.getBssid() << endl;
-    cout << "-> Target: 40:b4:cd:6e:de:d5" << endl;
+    cout << "-> Target: 40:b4:cd:6e:de:d5" << endl << endl;
     cout << "Deauthenticating... (ctrl + c to stop)" << endl;
 
     while (true) {
