@@ -1,6 +1,7 @@
 #include <codecvt>
 #include <zconf.h>
 #include <thread>
+#include <boost/algorithm/string.hpp>
 #include "Network.h"
 
 using namespace Tins;
@@ -51,7 +52,7 @@ std::vector<std::string> Network::getConnectedDevices() {
     return targets;
 }
 
-std::map<std::string, Dot11::address_type> Network::getAccessPoints() {
+std::map<std::string, std::set<Dot11::address_type>> Network::getAccessPoints() {
 
     SnifferConfiguration config;
     config.set_promisc_mode(true);
@@ -88,8 +89,15 @@ bool Network::scanCallback(PDU &pdu) {
                 ssids.insert(addr);
                 // Display the tuple "address - ssid".
                 if(!ssid.empty()) {
-                    std::cout << accessPoints.size() + 1 << " -> " << addr << " - " << ssid << std::endl;
-                    accessPoints.insert(std::pair<std::string, address_type>(ssid, addr));
+                    if(accessPoints.count(ssid)) {
+                        std::set<Dot11::address_type> addresses = accessPoints[ssid];
+                        addresses.insert(addr);
+                        accessPoints[ssid] = addresses;
+                    } else {
+                        std::set<Dot11::address_type> address;
+                        address.insert(addr);
+                        accessPoints.insert(std::make_pair(ssid, address));
+                    }
                 }
             } catch (std::runtime_error&) {
                 // No ssid, just ignore it.

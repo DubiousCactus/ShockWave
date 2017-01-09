@@ -41,6 +41,21 @@ void CLI::listInterfaces() {
 
 void CLI::listAccessPoints() {
     aps = network.getAccessPoints();
+    cout << endl << endl;
+    int i = 0;
+    for(const pair<string, set<address_type>>& pair: aps) {
+        if(pair.first == "") {
+            aps.erase(pair.first);
+            continue;
+        }
+        cout << i++ << ". " << pair.first << " -> [";
+        for(set<address_type>::iterator it = pair.second.begin(); it != pair.second.end(); it++) {
+            cout  << (*it).to_string();
+            if((it != pair.second.end()) && (next(it) != pair.second.end()))
+                cout << ", ";
+        }
+        cout << "]" << endl;
+    }
 }
 
 void CLI::chooseInterface(int no) {
@@ -57,9 +72,9 @@ void CLI::chooseInterface(int no) {
 
 void CLI::chooseAccessPoint(int no) {
     int i = 1;
-    for(map<string, address_type>::iterator iterator = aps.begin(); iterator != aps.end(); iterator++, i++) {
+    for(map<string, set<address_type>>::iterator iterator = aps.begin(); iterator != aps.end(); iterator++, i++) {
         if(i == no) {
-            network.setBssid(iterator->second.to_string());
+            network.setBssid((*(iterator->second.begin())).to_string());
             break;
         }
     }

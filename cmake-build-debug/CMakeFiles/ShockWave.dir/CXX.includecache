@@ -35,6 +35,8 @@ zconf.h
 -
 thread
 -
+boost/algorithm/string.hpp
+-
 Network.h
 /home/transpalette/Code/ShockWave/Network.h
 

@@ -10,7 +10,7 @@ class Network
 
     private:
         ssids_type ssids;
-        std::map<std::string, address_type> accessPoints;
+        std::map<std::string, std::set<address_type>> accessPoints;
         std::string ifaceName;
         Tins::PacketSender sender;
         Tins::HWAddress<6> bssid;
@@ -31,7 +31,7 @@ class Network
         void setBssid(const std::string hwAddress);
         std::string getBssid();
         std::vector<std::string> getConnectedDevices();
-        std::map<std::string, address_type> getAccessPoints();
+        std::map<std::string, std::set<address_type>> getAccessPoints();
 
     protected:
 
