@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/transpalette/Programming/CLionProjects/ShockWave/CLI.cpp
+/home/transpalette/Code/ShockWave/CLI.cpp
 CLI.h
-/home/transpalette/Programming/CLionProjects/ShockWave/CLI.h
+/home/transpalette/Code/ShockWave/CLI.h
 
-/home/transpalette/Programming/CLionProjects/ShockWave/CLI.h
+/home/transpalette/Code/ShockWave/CLI.h
 string
 -
 unistd.h
@@ -26,19 +26,23 @@ vector
 codecvt
 -
 Network.h
-/home/transpalette/Programming/CLionProjects/ShockWave/Network.h
+/home/transpalette/Code/ShockWave/Network.h
 
-/home/transpalette/Programming/CLionProjects/ShockWave/Network.cpp
+/home/transpalette/Code/ShockWave/Network.cpp
 codecvt
 -
+zconf.h
+-
+thread
+-
 Network.h
-/home/transpalette/Programming/CLionProjects/ShockWave/Network.h
+/home/transpalette/Code/ShockWave/Network.h
 
-/home/transpalette/Programming/CLionProjects/ShockWave/Network.h
+/home/transpalette/Code/ShockWave/Network.h
 tins/tins.h
 -
 
-/home/transpalette/Programming/CLionProjects/ShockWave/main.cpp
+/home/transpalette/Code/ShockWave/main.cpp
 CLI.h
-/home/transpalette/Programming/CLionProjects/ShockWave/CLI.h
+/home/transpalette/Code/ShockWave/CLI.h
 

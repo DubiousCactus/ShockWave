@@ -27,3 +27,7 @@
 *.exe
 *.out
 *.app
+
+#IDE
+vcs.xml
+cmake-build-debug/*

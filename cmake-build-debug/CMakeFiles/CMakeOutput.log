@@ -550,3 +550,45 @@ make[1]: Leaving directory '/home/transpalette/Programming/CLionProjects/ShockWa
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_3b384/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_3b384.dir/build.make CMakeFiles/cmTC_3b384.dir/build
+gmake[1]: Entering directory '/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3b384.dir/CheckIncludeFile.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_3b384.dir/CheckIncludeFile.c.o   -c /home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_3b384
+/home/transpalette/clion-2016.3.2/bin/cmake/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3b384.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_3b384.dir/CheckIncludeFile.c.o  -o cmTC_3b384 
+gmake[1]: Leaving directory '/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_fd727/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_fd727.dir/build.make CMakeFiles/cmTC_fd727.dir/build
+gmake[1]: Entering directory '/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fd727.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_fd727.dir/CheckFunctionExists.c.o   -c /home/transpalette/clion-2016.3.2/bin/cmake/share/cmake-3.6/Modules/CheckFunctionExists.c
+Linking C executable cmTC_fd727
+/home/transpalette/clion-2016.3.2/bin/cmake/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fd727.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_fd727.dir/CheckFunctionExists.c.o  -o cmTC_fd727 -lpthread 
+gmake[1]: Leaving directory '/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_ded70/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_ded70.dir/build.make CMakeFiles/cmTC_ded70.dir/build
+gmake[1]: Entering directory '/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ded70.dir/CheckIncludeFile.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_ded70.dir/CheckIncludeFile.c.o   -c /home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_ded70
+/home/transpalette/clion-2016.3.2/bin/cmake/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ded70.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_ded70.dir/CheckIncludeFile.c.o  -o cmTC_ded70 
+gmake[1]: Leaving directory '/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+

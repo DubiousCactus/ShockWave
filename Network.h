@@ -15,10 +15,12 @@ class Network
         Tins::PacketSender sender;
         Tins::HWAddress<6> bssid;
         Tins::HWAddress<6> target;
-        Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask("10.10.10.0", "10.10.10.0");
+        Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask("10.10.10.2", "10.10.10.255");
         Tins::Dot11Deauthentication deauthPacket;
         Tins::RadioTap radio;
         bool scanCallback(Tins::PDU& pdu);
+        bool scanning = true;
+        static void stopScan(bool *scanning);
 
     public:
         Network();

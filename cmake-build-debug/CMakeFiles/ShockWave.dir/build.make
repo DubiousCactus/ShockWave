@@ -43,10 +43,10 @@ RM = /home/transpalette/clion-2016.3.2/bin/cmake/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/transpalette/Programming/CLionProjects/ShockWave
+CMAKE_SOURCE_DIR = /home/transpalette/Code/ShockWave
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug
+CMAKE_BINARY_DIR = /home/transpalette/Code/ShockWave/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/ShockWave.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/ShockWave.dir/flags.make
 
 CMakeFiles/ShockWave.dir/main.cpp.o: CMakeFiles/ShockWave.dir/flags.make
 CMakeFiles/ShockWave.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ShockWave.dir/main.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ShockWave.dir/main.cpp.o -c /home/transpalette/Programming/CLionProjects/ShockWave/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ShockWave.dir/main.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ShockWave.dir/main.cpp.o -c /home/transpalette/Code/ShockWave/main.cpp
 
 CMakeFiles/ShockWave.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ShockWave.dir/main.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/transpalette/Programming/CLionProjects/ShockWave/main.cpp > CMakeFiles/ShockWave.dir/main.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/transpalette/Code/ShockWave/main.cpp > CMakeFiles/ShockWave.dir/main.cpp.i
 
 CMakeFiles/ShockWave.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ShockWave.dir/main.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/transpalette/Programming/CLionProjects/ShockWave/main.cpp -o CMakeFiles/ShockWave.dir/main.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/transpalette/Code/ShockWave/main.cpp -o CMakeFiles/ShockWave.dir/main.cpp.s
 
 CMakeFiles/ShockWave.dir/main.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/ShockWave.dir/main.cpp.o.provides.build: CMakeFiles/ShockWave.dir/mai
 
 CMakeFiles/ShockWave.dir/CLI.cpp.o: CMakeFiles/ShockWave.dir/flags.make
 CMakeFiles/ShockWave.dir/CLI.cpp.o: ../CLI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ShockWave.dir/CLI.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ShockWave.dir/CLI.cpp.o -c /home/transpalette/Programming/CLionProjects/ShockWave/CLI.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ShockWave.dir/CLI.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ShockWave.dir/CLI.cpp.o -c /home/transpalette/Code/ShockWave/CLI.cpp
 
 CMakeFiles/ShockWave.dir/CLI.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ShockWave.dir/CLI.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/transpalette/Programming/CLionProjects/ShockWave/CLI.cpp > CMakeFiles/ShockWave.dir/CLI.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/transpalette/Code/ShockWave/CLI.cpp > CMakeFiles/ShockWave.dir/CLI.cpp.i
 
 CMakeFiles/ShockWave.dir/CLI.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ShockWave.dir/CLI.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/transpalette/Programming/CLionProjects/ShockWave/CLI.cpp -o CMakeFiles/ShockWave.dir/CLI.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/transpalette/Code/ShockWave/CLI.cpp -o CMakeFiles/ShockWave.dir/CLI.cpp.s
 
 CMakeFiles/ShockWave.dir/CLI.cpp.o.requires:
 
@@ -107,16 +107,16 @@ CMakeFiles/ShockWave.dir/CLI.cpp.o.provides.build: CMakeFiles/ShockWave.dir/CLI.
 
 CMakeFiles/ShockWave.dir/Network.cpp.o: CMakeFiles/ShockWave.dir/flags.make
 CMakeFiles/ShockWave.dir/Network.cpp.o: ../Network.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ShockWave.dir/Network.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ShockWave.dir/Network.cpp.o -c /home/transpalette/Programming/CLionProjects/ShockWave/Network.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ShockWave.dir/Network.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ShockWave.dir/Network.cpp.o -c /home/transpalette/Code/ShockWave/Network.cpp
 
 CMakeFiles/ShockWave.dir/Network.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ShockWave.dir/Network.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/transpalette/Programming/CLionProjects/ShockWave/Network.cpp > CMakeFiles/ShockWave.dir/Network.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/transpalette/Code/ShockWave/Network.cpp > CMakeFiles/ShockWave.dir/Network.cpp.i
 
 CMakeFiles/ShockWave.dir/Network.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ShockWave.dir/Network.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/transpalette/Programming/CLionProjects/ShockWave/Network.cpp -o CMakeFiles/ShockWave.dir/Network.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/transpalette/Code/ShockWave/Network.cpp -o CMakeFiles/ShockWave.dir/Network.cpp.s
 
 CMakeFiles/ShockWave.dir/Network.cpp.o.requires:
 
@@ -144,7 +144,7 @@ ShockWave: CMakeFiles/ShockWave.dir/Network.cpp.o
 ShockWave: CMakeFiles/ShockWave.dir/build.make
 ShockWave: /usr/local/lib/libtins.so
 ShockWave: CMakeFiles/ShockWave.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable ShockWave"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable ShockWave"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ShockWave.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -163,6 +163,6 @@ CMakeFiles/ShockWave.dir/clean:
 .PHONY : CMakeFiles/ShockWave.dir/clean
 
 CMakeFiles/ShockWave.dir/depend:
-	cd /home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/transpalette/Programming/CLionProjects/ShockWave /home/transpalette/Programming/CLionProjects/ShockWave /home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug /home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug /home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/transpalette/Code/ShockWave/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/transpalette/Code/ShockWave /home/transpalette/Code/ShockWave /home/transpalette/Code/ShockWave/cmake-build-debug /home/transpalette/Code/ShockWave/cmake-build-debug /home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ShockWave.dir/depend
 

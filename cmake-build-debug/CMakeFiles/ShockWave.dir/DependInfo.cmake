@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/transpalette/Programming/CLionProjects/ShockWave/CLI.cpp" "/home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/CLI.cpp.o"
-  "/home/transpalette/Programming/CLionProjects/ShockWave/Network.cpp" "/home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/Network.cpp.o"
-  "/home/transpalette/Programming/CLionProjects/ShockWave/main.cpp" "/home/transpalette/Programming/CLionProjects/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/main.cpp.o"
+  "/home/transpalette/Code/ShockWave/CLI.cpp" "/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/CLI.cpp.o"
+  "/home/transpalette/Code/ShockWave/Network.cpp" "/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/Network.cpp.o"
+  "/home/transpalette/Code/ShockWave/main.cpp" "/home/transpalette/Code/ShockWave/cmake-build-debug/CMakeFiles/ShockWave.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
