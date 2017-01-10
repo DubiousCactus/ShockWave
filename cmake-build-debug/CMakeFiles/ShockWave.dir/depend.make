@@ -5,6 +5,7 @@ CMakeFiles/ShockWave.dir/CLI.cpp.o: ../CLI.cpp
 CMakeFiles/ShockWave.dir/CLI.cpp.o: ../CLI.h
 CMakeFiles/ShockWave.dir/CLI.cpp.o: ../Network.h
 
+CMakeFiles/ShockWave.dir/Network.cpp.o: ../CLI.h
 CMakeFiles/ShockWave.dir/Network.cpp.o: ../Network.cpp
 CMakeFiles/ShockWave.dir/Network.cpp.o: ../Network.h
 

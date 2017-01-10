@@ -43,6 +43,8 @@ Network.h
 /home/transpalette/Code/ShockWave/Network.h
 tins/tins.h
 -
+CLI.h
+/home/transpalette/Code/ShockWave/CLI.h
 
 /home/transpalette/Code/ShockWave/main.cpp
 CLI.h
