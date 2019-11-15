@@ -31,3 +31,5 @@
 #IDE
 vcs.xml
 cmake-build-debug/*
+
+build/

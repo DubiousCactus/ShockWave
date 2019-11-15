@@ -1,6 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ShockWave" type="CMakeRunConfiguration" factoryName="Application" WORKING_DIR="" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ShockWave" TARGET_NAME="ShockWave" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ShockWave" RUN_TARGET_NAME="ShockWave">
-    <envs />
-    <method />
-  </configuration>
-</component>

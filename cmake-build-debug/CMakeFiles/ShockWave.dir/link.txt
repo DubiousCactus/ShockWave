@@ -1,1 +1,0 @@
-/usr/bin/c++   -g   CMakeFiles/ShockWave.dir/main.cpp.o CMakeFiles/ShockWave.dir/CLI.cpp.o CMakeFiles/ShockWave.dir/Network.cpp.o  -o ShockWave /usr/local/lib/libtins.so -pthread -Wl,-rpath,/usr/local/lib 
