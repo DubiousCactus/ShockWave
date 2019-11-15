@@ -3,15 +3,18 @@ project(ShockWave)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-project(ShockWave)
-
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_library(TINS_LIBRARY tins)
-find_package (Threads REQUIRED)
 
 set(SOURCE_FILES main.cpp CLI.cpp CLI.h Network.cpp Network.h)
-add_executable(ShockWave ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(ShockWave "${TINS_LIBRARY}")
-target_link_libraries(ShockWave ${CMAKE_THREAD_LIBS_INIT})
+message(STATUS "Looking for tins...")
+find_library(TINS_LIBRARY tins)
+if(TINS_LIBRARY)
+    target_link_libraries(${PROJECT_NAME} ${TINS_LIBRARY})
+else()
+    message(FATAL_ERROR "tins library not found!")
+endif()
+
+find_package (Threads REQUIRED)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
