@@ -1,7 +1,9 @@
 #include <codecvt>
 #include <zconf.h>
 #include <thread>
+#include <iostream>
 #include <boost/algorithm/string.hpp>
+
 #include "Network.h"
 
 using namespace Tins;

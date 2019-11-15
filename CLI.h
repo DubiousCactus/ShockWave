@@ -8,6 +8,8 @@
 #include <locale>
 #include <vector>
 #include <codecvt>
+#include <iostream>
+
 #include "Network.h"
 
 class CLI
