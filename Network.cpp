@@ -1,9 +1,9 @@
-#include <codecvt>
-#include <zconf.h>
-#include <thread>
-#include <iostream>
-#include <tins/icmp.h>
 #include <boost/algorithm/string.hpp>
+#include <codecvt>
+#include <iostream>
+#include <thread>
+#include <tins/icmp.h>
+#include <zconf.h>
 
 #include "Network.h"
 
@@ -12,22 +12,24 @@ using namespace Tins;
 Network::Network()
 {
     iface = NetworkInterface::default_interface();
-    deauthPacket = Dot11Deauthentication(target, bssid); //Set target / sender
-    deauthPacket.addr3(bssid); //Set the BSSID
-    deauthPacket.reason_code(0x0007); //From airplay-ng
+    deauthPacket = Dot11Deauthentication(target, bssid); // Set target / sender
+    deauthPacket.addr3(bssid);                           // Set the BSSID
+    deauthPacket.reason_code(0x0007);                    // From airplay-ng
     radio = RadioTap() / deauthPacket;
 }
 
-Network::~Network()
-{
-}
+Network::~Network() {}
 
-void Network::sendDeauth() {
-    //sender.send(radio, ifaceName);
+void
+Network::sendDeauth()
+{
+    // sender.send(radio, ifaceName);
 }
 
 // TODO: Filter out non 802.11 interfaces
-std::vector<std::wstring> Network::getInterfaces() {
+std::vector<std::wstring>
+Network::getInterfaces()
+{
     std::vector<std::wstring> interfacesNames;
     // First fetch all network interfaces
     std::vector<NetworkInterface> interfaces = NetworkInterface::all();
@@ -39,14 +41,17 @@ std::vector<std::wstring> Network::getInterfaces() {
     return interfacesNames;
 }
 
-void Network::scanDevices(Tins::PacketSender& sender, std::string iprange) {
+void
+Network::scanDevices(Tins::PacketSender& sender, std::string iprange)
+{
     int delimiter_pos = iprange.find(":");
     std::string from = iprange.substr(0, delimiter_pos);
-    std::string to = iprange.substr(delimiter_pos+1, iprange.length()-delimiter_pos);
+    std::string to =
+      iprange.substr(delimiter_pos + 1, iprange.length() - delimiter_pos);
     // TODO: Validate the range
     Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask(from, to);
     NetworkInterface::Info infoScanner = iface.info();
-    for (const auto &target : networkRange) {
+    for (const auto& target : networkRange) {
         IP ping = IP(target, infoScanner.ip_addr) / ICMP();
         sender.send(ping, iface);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -54,51 +59,46 @@ void Network::scanDevices(Tins::PacketSender& sender, std::string iprange) {
     ipScanning = false;
 }
 
-bool Network::ipScanCallback(Tins::PDU& pdu)
+bool
+Network::ipScanCallback(Tins::PDU& pdu)
 {
     const EthernetII& eth = pdu.rfind_pdu<EthernetII>();
     const IP& ip = pdu.rfind_pdu<IP>();
     const ICMP& icmp = pdu.rfind_pdu<ICMP>();
     if (icmp.type() == ICMP::ECHO_REPLY) {
         std::cout << "\t-> " << ip.src_addr().to_string() << " ("
-            << eth.src_addr().to_string() << ")" << std::endl;
-        targets.insert(
-                std::pair<
-                    Tins::IPv4Address,
-                    Tins::HWAddress<6>
-                >(ip.src_addr(), eth.src_addr())
-        );
+                  << eth.src_addr().to_string() << ")" << std::endl;
+        targets.insert(std::pair<Tins::IPv4Address, Tins::HWAddress<6>>(
+          ip.src_addr(), eth.src_addr()));
     }
     return ipScanning;
 }
 
-void Network::getConnectedDevices(std::string iprange) {
+void
+Network::getConnectedDevices(std::string iprange)
+{
     SnifferConfiguration config;
     config.set_promisc_mode(false);
-    config.set_filter("ip proto \\icmp and not src host "
-            + iface.addresses().ip_addr.to_string());
+    config.set_filter("ip proto \\icmp and not src host " +
+                      iface.addresses().ip_addr.to_string());
     Sniffer sniffer(iface.name(), config);
 
     PacketSender sender;
     auto handler = bind(&Network::ipScanCallback, this, std::placeholders::_1);
     ipScanning = true;
-    std::thread sniff_thread(
-        [&]() {
-            sniffer.sniff_loop(handler);
-        }
-    );
+    std::thread sniff_thread([&]() { sniffer.sniff_loop(handler); });
     std::cout << "[*] Running IP scan..." << std::endl;
     scanDevices(sender, iprange);
     sniff_thread.join();
 }
 
-std::map<std::string, std::set<Dot11::address_type>> Network::getAccessPoints() {
-
+std::map<std::string, std::set<Dot11::address_type>>
+Network::getAccessPoints()
+{
     SnifferConfiguration config;
     config.set_promisc_mode(true);
     config.set_filter("type mgt subtype beacon");
     config.set_rfmon(true);
-
     Sniffer sniffer(iface.name(), config);
 
     std::thread scanThread(&Network::stopScan, &scanning);
@@ -109,10 +109,12 @@ std::map<std::string, std::set<Dot11::address_type>> Network::getAccessPoints() 
     return accessPoints;
 }
 
-//TODO: Either connect to AP to get the DHCP lease + netmask to derive the IPv4
-//range to scan, or ask for a custom range.
+// TODO: Either connect to AP to get the DHCP lease + netmask to derive the IPv4
+// range to scan, or ask for a custom range.
 
-bool Network::scanCallback(PDU &pdu) {
+bool
+Network::scanCallback(PDU& pdu)
+{
     // Get the Dot11 layer
     const Dot11Beacon& beacon = pdu.rfind_pdu<Dot11Beacon>();
     // All beacons must have from_ds == to_ds == 0
@@ -131,9 +133,10 @@ bool Network::scanCallback(PDU &pdu) {
                 // Save it so we don't show it again.
                 ssids.insert(addr);
                 // Display the tuple "address - ssid".
-                if(!ssid.empty()) {
-                    if(accessPoints.count(ssid)) {
-                        std::set<Dot11::address_type> addresses = accessPoints[ssid];
+                if (!ssid.empty()) {
+                    if (accessPoints.count(ssid)) {
+                        std::set<Dot11::address_type> addresses =
+                          accessPoints[ssid];
                         addresses.insert(addr);
                         accessPoints[ssid] = addresses;
                     } else {
@@ -151,19 +154,27 @@ bool Network::scanCallback(PDU &pdu) {
     return scanning;
 }
 
-void Network::stopScan(bool *scanning) {
+void
+Network::stopScan(bool* scanning)
+{
     sleep(5);
     *scanning = false;
 }
 
-void Network::setInterface(std::string interface) {
-    //ifaceName = interface;
+void
+Network::setInterface(std::string interface)
+{
+    // ifaceName = interface;
 }
 
-void Network::setBssid(const std::string hwAddress) {
+void
+Network::setBssid(const std::string hwAddress)
+{
     bssid = HWAddress<6>(hwAddress);
 }
 
-std::string Network::getBssid() {
+std::string
+Network::getBssid()
+{
     return bssid.to_string();
 }

@@ -15,7 +15,7 @@ class Network
         //Tins::PacketSender sender;
         Tins::HWAddress<6> bssid;
         Tins::HWAddress<6> target;
-        std::map<Tins::IPv4Address, Tins::HWAddress<6>> targets;
+        std::map<Tins::IPv4Address, Tins::HWAddress> targets;
         //Tins::IPv4Range networkRange;
         Tins::Dot11Deauthentication deauthPacket;
         Tins::RadioTap radio;
