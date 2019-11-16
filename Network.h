@@ -11,15 +11,17 @@ class Network
     private:
         ssids_type ssids;
         std::map<std::string, std::set<address_type>> accessPoints;
-        std::string ifaceName;
-        Tins::PacketSender sender;
+        Tins::NetworkInterface iface;
+        //Tins::PacketSender sender;
         Tins::HWAddress<6> bssid;
         Tins::HWAddress<6> target;
-        Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask("10.10.10.2", "10.10.10.255");
+        //Tins::IPv4Range networkRange;
         Tins::Dot11Deauthentication deauthPacket;
         Tins::RadioTap radio;
         bool scanCallback(Tins::PDU& pdu);
+        bool ipScanCallback(Tins::PDU& pdu);
         bool scanning = true;
+        bool ipScanning = false;
         static void stopScan(bool *scanning);
 
     public:
@@ -29,9 +31,11 @@ class Network
         std::vector<std::wstring> getInterfaces();
         void setInterface(std::string interface);
         void setBssid(const std::string hwAddress);
+        void connectAP();
         std::string getBssid();
-        std::vector<std::string> getConnectedDevices();
+        std::vector<std::string> getConnectedDevices(std::string iprange);
         std::map<std::string, std::set<address_type>> getAccessPoints();
+        void scanDevices(Tins::PacketSender& sender, std::string iprange);
 
     protected:
 

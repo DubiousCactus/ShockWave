@@ -2,7 +2,7 @@
 
 CLI::CLI()
 {
-    state = CHOOSEIF;
+    state = LISTHOSTS;
 }
 
 CLI::~CLI()
@@ -25,7 +25,13 @@ void CLI::showHeader() {
 }
 
 void CLI::listConnectedHosts() {
-    targets = network.getConnectedDevices();
+    std::string iprange;
+    std::cout << "Enter the IP range to scan (<from>:<to>): ";
+    //std::cin >> iprange;
+    // TODO: Validate with a regex
+    iprange = "192.168.31.1:192.168.31.255";
+    targets = network.getConnectedDevices(iprange);
+    exit(0);
 }
 
 void CLI::listInterfaces() {
@@ -105,7 +111,7 @@ void CLI::showAction() {
             state = ATTACK;
             break;
         case ATTACK:
-            attack();
+            //attack();
             break;
     }
 }
