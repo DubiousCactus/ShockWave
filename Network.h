@@ -15,6 +15,7 @@ class Network
         //Tins::PacketSender sender;
         Tins::HWAddress<6> bssid;
         Tins::HWAddress<6> target;
+        std::map<Tins::IPv4Address, Tins::HWAddress<6>> targets;
         //Tins::IPv4Range networkRange;
         Tins::Dot11Deauthentication deauthPacket;
         Tins::RadioTap radio;
@@ -33,7 +34,7 @@ class Network
         void setBssid(const std::string hwAddress);
         void connectAP();
         std::string getBssid();
-        std::vector<std::string> getConnectedDevices(std::string iprange);
+        void getConnectedDevices(std::string iprange);
         std::map<std::string, std::set<address_type>> getAccessPoints();
         void scanDevices(Tins::PacketSender& sender, std::string iprange);
 

@@ -11,7 +11,6 @@ using namespace Tins;
 
 Network::Network()
 {
-    //ifaceName = "wlan0";
     iface = NetworkInterface::default_interface();
     deauthPacket = Dot11Deauthentication(target, bssid); //Set target / sender
     deauthPacket.addr3(bssid); //Set the BSSID
@@ -44,6 +43,7 @@ void Network::scanDevices(Tins::PacketSender& sender, std::string iprange) {
     int delimiter_pos = iprange.find(":");
     std::string from = iprange.substr(0, delimiter_pos);
     std::string to = iprange.substr(delimiter_pos+1, iprange.length()-delimiter_pos);
+    // TODO: Validate the range
     Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask(from, to);
     NetworkInterface::Info infoScanner = iface.info();
     for (const auto &target : networkRange) {
@@ -56,19 +56,23 @@ void Network::scanDevices(Tins::PacketSender& sender, std::string iprange) {
 
 bool Network::ipScanCallback(Tins::PDU& pdu)
 {
-    // Find IP and ICMP PDUs
-    std::vector<Tins::IPv4Address> targets;
+    const EthernetII& eth = pdu.rfind_pdu<EthernetII>();
     const IP& ip = pdu.rfind_pdu<IP>();
     const ICMP& icmp = pdu.rfind_pdu<ICMP>();
     if (icmp.type() == ICMP::ECHO_REPLY) {
-        std::cout << "\t-> " << ip.src_addr().to_string() << std::endl;
-        targets.push_back(ip.src_addr());
+        std::cout << "\t-> " << ip.src_addr().to_string() << " ("
+            << eth.src_addr().to_string() << ")" << std::endl;
+        targets.insert(
+                std::pair<
+                    Tins::IPv4Address,
+                    Tins::HWAddress<6>
+                >(ip.src_addr(), eth.src_addr())
+        );
     }
     return ipScanning;
 }
 
-std::vector<std::string> Network::getConnectedDevices(std::string iprange) {
-    std::vector<std::string> targets;
+void Network::getConnectedDevices(std::string iprange) {
     SnifferConfiguration config;
     config.set_promisc_mode(false);
     config.set_filter("ip proto \\icmp and not src host "
@@ -86,8 +90,6 @@ std::vector<std::string> Network::getConnectedDevices(std::string iprange) {
     std::cout << "[*] Running IP scan..." << std::endl;
     scanDevices(sender, iprange);
     sniff_thread.join();
-
-    return targets;
 }
 
 std::map<std::string, std::set<Dot11::address_type>> Network::getAccessPoints() {

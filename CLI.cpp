@@ -30,7 +30,8 @@ void CLI::listConnectedHosts() {
     //std::cin >> iprange;
     // TODO: Validate with a regex
     iprange = "192.168.31.1:192.168.31.255";
-    targets = network.getConnectedDevices(iprange);
+    std::cout << iprange << std::endl;
+    network.getConnectedDevices(iprange);
     exit(0);
 }
 
