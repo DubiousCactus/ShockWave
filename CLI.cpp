@@ -24,7 +24,7 @@ CLI::showHeader()
 {
     std::cout << "--------------ShockWave----------------" << std::endl;
     std::cout << "-----------By Transpalette-------------" << std::endl;
-    std::cout << "--Kick em out of your personal space---" << std::endl;
+    std::cout << "--Kick 'em out of your personal space--" << std::endl;
     std::cout << "***************************************" << std::endl
               << std::endl;
 }
@@ -39,14 +39,12 @@ CLI::listConnectedHosts()
     iprange = "192.168.31.1:192.168.31.255";
     std::cout << iprange << std::endl;
     network.getConnectedDevices(iprange);
-    exit(0);
 }
 
 void
 CLI::listInterfaces()
 {
     interfaces = network.getInterfaces();
-
     int i = 0;
     for (const std::wstring& iface : interfaces) {
         std::wcout << ++i << ". " << iface << std::endl;
@@ -87,7 +85,7 @@ CLI::chooseInterface(int no)
 
     // use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
     std::string iface = converter.to_bytes(w_iface);
-    network.setInterface(iface);
+    network.setSpoofingInterface(iface);
 }
 
 void
@@ -112,7 +110,7 @@ CLI::showAction()
         case CHOOSEIF:
             listInterfaces();
             int interfaceNo;
-            std::cout << std::endl << std::endl << "Interface: ";
+            std::cout << std::endl << std::endl << "[*] Choose the spoofing interface: ";
             std::cin >> interfaceNo;
             chooseInterface(interfaceNo);
             state = LISTAPS;
@@ -120,21 +118,20 @@ CLI::showAction()
         case LISTAPS:
             listAccessPoints();
             int ap;
-            std::cout << std::endl << std::endl << "Access point: ";
+            std::cout << std::endl << std::endl << "[*] Choose the access point: ";
             std::cin >> ap;
             chooseAccessPoint(ap);
-            state = LISTHOSTS;
+            state = ATTACK;
             break;
         case LISTHOSTS:
             listConnectedHosts();
             state = WHITELIST;
             break;
         case WHITELIST:
-
-            state = ATTACK;
+            state = CHOOSEIF;
             break;
         case ATTACK:
-            // attack();
+            attack();
             break;
     }
 }
@@ -153,11 +150,13 @@ CLI::attack()
 {
 
     std::cout << "-> BSSID: " << network.getBssid() << std::endl;
-    std::cout << "-> Target: 40:b4:cd:6e:de:d5" << std::endl << std::endl;
-    std::cout << "Deauthenticating... (ctrl + c to stop)" << std::endl;
-
-    while (true) {
-        network.sendDeauth();
-        usleep(1000000);
-    }
+    //std::cout << "-> Target: 40:b4:cd:6e:de:d5" << std::endl << std::endl;
+    std::cout << "[*] Deauthenticating..." << std::endl;
+    network.startDeauth();
+    do 
+    {
+        std::cout << '\n' << "[*] Press enter to stop...";
+    } while (std::cin.get() != '\n');
+    std::cout << " OKAY WE STOP ";
+    network.stopDeauth();
 }
