@@ -33,12 +33,16 @@ void
 CLI::listConnectedHosts()
 {
     std::string iprange;
-    std::cout << "Enter the IP range to scan (<from>:<to>): ";
+    std::cout << "Enter the IP range to scan (<base_address>/<int_mask>): ";
     // std::cin >> iprange;
     // TODO: Validate with a regex
-    iprange = "192.168.31.1:192.168.31.255";
+    iprange = "192.168.31.0/24";
     std::cout << iprange << std::endl;
     network.getConnectedDevices(iprange);
+    std::cout << "[*] Done! ";
+    do {
+        std::cout << "Press enter to proceed...";
+    } while (std::cin.get() != '\n');
 }
 
 void

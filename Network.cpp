@@ -65,12 +65,12 @@ Network::getInterfaces()
 void
 Network::scanDevices(Tins::PacketSender& sender, std::string iprange)
 {
-    int delimiter_pos = iprange.find(":");
-    std::string from = iprange.substr(0, delimiter_pos);
-    std::string to =
+    int delimiter_pos = iprange.find("/");
+    std::string base = iprange.substr(0, delimiter_pos);
+    std::string mask =
       iprange.substr(delimiter_pos + 1, iprange.length() - delimiter_pos);
     // TODO: Validate the range
-    Tins::IPv4Range networkRange = Tins::IPv4Range::from_mask(from, to);
+    auto networkRange = Tins::IPv4Address(base) / std::stoi(mask);
     NetworkInterface::Info infoScanner = defaultIface.info();
     for (const auto& target : networkRange) {
         IP ping = IP(target, infoScanner.ip_addr) / ICMP();
