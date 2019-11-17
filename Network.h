@@ -12,7 +12,7 @@ class Network
     private:
         ssids_type ssids;
         std::map<std::string, std::set<address_type>> accessPoints;
-        Tins::NetworkInterface defaultIface;
+        Tins::NetworkInterface defaultIface = Tins::NetworkInterface::default_interface();
         std::string spoofingIfaceName;
         Tins::HWAddress<6> spoofedBSSID;
         std::map<Tins::IPv4Address, Tins::HWAddress<6>> targets;
