@@ -2,6 +2,7 @@
 #define NETWORK_H
 
 #include <thread>
+#include <atomic>
 #include <tins/tins.h>
 
 class Network
@@ -19,11 +20,11 @@ class Network
         Tins::Dot11Deauthentication deauthPacket;
         Tins::RadioTap radio;
         std::thread deauthThread;
-        bool scanCallback(Tins::PDU& pdu);
+        bool apScanCallback(Tins::PDU& pdu);
         bool ipScanCallback(Tins::PDU& pdu);
-        bool scanning = true;
-        bool deauthing = false;
-        bool ipScanning = false;
+        std::atomic<bool> apScanning;
+        std::atomic<bool> deauthing;
+        std::atomic<bool> ipScanning;
         static void stopScan(bool *scanning);
         void sendDeauth();
 

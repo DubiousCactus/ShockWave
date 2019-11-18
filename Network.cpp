@@ -83,12 +83,15 @@ Network::scanDevices(Tins::PacketSender& sender, std::string iprange)
         std::cout << "[*] Using " << defaultIface.ipv4_address().to_string() << " / " << defaultIface.ipv4_mask().to_string()<<std::endl;
     }
     NetworkInterface::Info infoScanner = defaultIface.info();
+    IP ping;
     for (const auto& target : networkRange) {
-        IP ping = IP(target, infoScanner.ip_addr) / ICMP();
+        ping = IP(target, infoScanner.ip_addr) / ICMP();
         sender.send(ping, defaultIface);
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     ipScanning = false;
+    ping = IP(targets.begin()->first, infoScanner.ip_addr) / ICMP();
+    sender.send(ping, defaultIface);
 }
 
 bool
@@ -109,7 +112,6 @@ Network::ipScanCallback(Tins::PDU& pdu)
 void
 Network::getConnectedDevices(std::string iprange)
 {
-    //TODO: Race condition?
     SnifferConfiguration config;
     std::cout << "[*] Running IP scan on default interface "
               << defaultIface.name() << std::endl;
@@ -123,37 +125,33 @@ Network::getConnectedDevices(std::string iprange)
     ipScanning = true;
     std::thread sniff_thread([&]() { sniffer.sniff_loop(handler); });
     scanDevices(sender, iprange);
+    std::cout << "Done sending. Waiting for thread" << std::endl;
     sniff_thread.join();
+    std::cout << "Thread joined" << std::endl;
 }
 
 std::map<std::string, std::set<Dot11::address_type>>
 Network::getAccessPoints()
 {
-    //TODO: Race condition?
     SnifferConfiguration config;
     config.set_promisc_mode(true);
     config.set_filter("type mgt subtype beacon");
     config.set_rfmon(true);
     Sniffer sniffer(spoofingIfaceName, config);
 
-    std::thread scanThread(&Network::stopScan, &scanning);
-    scanThread.detach();
-
-    //scanning = true;
-    sniffer.sniff_loop(make_sniffer_handler(this, &Network::scanCallback));
-
-    //std::this_thread::sleep_for(std::chrono::seconds(5));
-    //std::cout << "Stopping the scan" << std::endl;
-    //scanning = false;
+    auto handler = bind(&Network::apScanCallback, this, std::placeholders::_1);
+    apScanning = true;
+    std::thread scan_thread([&]() { sniffer.sniff_loop(handler); });
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::cout << "Stopping the scan" << std::endl;
+    apScanning = false;
+    scan_thread.join();
 
     return accessPoints;
 }
 
-// TODO: Either connect to AP to get the DHCP lease + netmask to derive the IPv4
-// range to scan, or ask for a custom range.
-
 bool
-Network::scanCallback(PDU& pdu)
+Network::apScanCallback(PDU& pdu)
 {
     // Get the Dot11 layer
     const Dot11Beacon& beacon = pdu.rfind_pdu<Dot11Beacon>();
@@ -191,14 +189,7 @@ Network::scanCallback(PDU& pdu)
         }
     }
 
-    return scanning;
-}
-
-void
-Network::stopScan(bool* scanning)
-{
-    sleep(5);
-    *scanning = false;
+    return apScanning;
 }
 
 void
