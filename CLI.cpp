@@ -33,11 +33,9 @@ void
 CLI::listConnectedHosts()
 {
     std::string iprange;
-    std::cout << "Enter the IP range to scan (<base_address>/<int_mask>): ";
-    // std::cin >> iprange;
+    std::cout << "Enter the IP range to scan (<base_address>/<int_mask>), or leave empty to use the DHCP config: ";
+    getline(std::cin, iprange);
     // TODO: Validate with a regex
-    iprange = "192.168.31.0/24";
-    std::cout << iprange << std::endl;
     network.getConnectedDevices(iprange);
     std::cout << "[*] Done! ";
     do {
@@ -102,7 +100,7 @@ CLI::chooseAccessPoint(int no)
          iterator != aps.end();
          iterator++, i++) {
         if (i == no) {
-            network.setBssid((*(iterator->second.begin())).to_string());
+            network.setBssid(*iterator->second.begin());
             break;
         }
     }

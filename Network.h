@@ -32,7 +32,7 @@ class Network
         virtual ~Network();
         std::vector<std::wstring> getInterfaces();
         void setSpoofingInterface(std::string interface);
-        void setBssid(const std::string hwAddress);
+        void setBssid(const Tins::HWAddress<6> hwAddress);
         void connectAP();
         std::string getBssid();
         void getConnectedDevices(std::string iprange);
