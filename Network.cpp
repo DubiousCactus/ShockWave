@@ -9,9 +9,7 @@
 
 using namespace Tins;
 
-Network::Network()
-{
-}
+Network::Network() {}
 
 Network::~Network() {}
 
@@ -36,6 +34,13 @@ Network::sendDeauth()
 void
 Network::startDeauth()
 {
+    Tins::NetworkInterface spoofedIface(spoofingIfaceName);
+    if (!spoofedIface.ipv4_address()) {
+        std::cout << "[!] Interface " << spoofingIfaceName
+                  << " does not have an IPv4 address!" << std::endl
+                  << "[!] Exiting..." << std::endl;
+        exit(1);
+    }
     deauthing = true;
     deauthThread = std::thread(&Network::sendDeauth, this);
 }
@@ -65,6 +70,7 @@ Network::getInterfaces()
 void
 Network::scanDevices(Tins::PacketSender& sender, std::string iprange)
 {
+    // TODO: Infer netmask from iface's IP address
     int delimiter_pos = iprange.find("/");
     std::string base = iprange.substr(0, delimiter_pos);
     std::string mask =
@@ -75,7 +81,7 @@ Network::scanDevices(Tins::PacketSender& sender, std::string iprange)
     for (const auto& target : networkRange) {
         IP ping = IP(target, infoScanner.ip_addr) / ICMP();
         sender.send(ping, defaultIface);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     ipScanning = false;
 }
@@ -99,8 +105,8 @@ void
 Network::getConnectedDevices(std::string iprange)
 {
     SnifferConfiguration config;
-    std::cout << "[*] Running IP scan on default interface " <<
-        defaultIface.name() << std::endl;
+    std::cout << "[*] Running IP scan on default interface "
+              << defaultIface.name() << std::endl;
     config.set_promisc_mode(false);
     config.set_filter("ip proto \\icmp and not src host " +
                       defaultIface.addresses().ip_addr.to_string());
@@ -112,7 +118,7 @@ Network::getConnectedDevices(std::string iprange)
     std::thread sniff_thread([&]() { sniffer.sniff_loop(handler); });
     scanDevices(sender, iprange);
     sniff_thread.join();
-} 
+}
 std::map<std::string, std::set<Dot11::address_type>>
 Network::getAccessPoints()
 {
@@ -185,7 +191,7 @@ Network::stopScan(bool* scanning)
 void
 Network::setSpoofingInterface(std::string interface)
 {
-     spoofingIfaceName = interface;
+    spoofingIfaceName = interface;
 }
 
 void

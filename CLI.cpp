@@ -58,6 +58,7 @@ CLI::listInterfaces()
 void
 CLI::listAccessPoints()
 {
+    std::cout << "[*] Scanning access points..." << std::endl;
     aps = network.getAccessPoints();
     std::cout << std::endl << std::endl;
     int i = 0;
@@ -161,6 +162,5 @@ CLI::attack()
     {
         std::cout << '\n' << "[*] Press enter to stop...";
     } while (std::cin.get() != '\n');
-    std::cout << " OKAY WE STOP ";
     network.stopDeauth();
 }
