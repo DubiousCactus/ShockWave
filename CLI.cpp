@@ -2,7 +2,7 @@
 
 CLI::CLI()
 {
-    state = CHOOSEIF;
+    state = LISTHOSTS;
 }
 
 CLI::~CLI()
@@ -36,11 +36,16 @@ CLI::listConnectedHosts()
     std::cout << "Enter the IP range to scan (<base_address>/<int_mask>), or leave empty to use the DHCP config: ";
     getline(std::cin, iprange);
     // TODO: Validate with a regex
-    network.getConnectedDevices(iprange);
+    int devices = network.getConnectedDevices(iprange);
     std::cout << "[*] Done! ";
-    do {
-        std::cout << "Press enter to proceed...";
-    } while (std::cin.get() != '\n');
+    if (devices > 0) {
+        do {
+            std::cout << "Press enter to proceed...";
+        } while (std::cin.get() != '\n');
+    } else {
+        std::cout << "[*] No devices found on the network. Exiting..." << std::endl;
+        exit(0);
+    }
 }
 
 void

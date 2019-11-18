@@ -110,7 +110,7 @@ Network::ipScanCallback(Tins::PDU& pdu)
     return ipScanning;
 }
 
-void
+int
 Network::getConnectedDevices(std::string iprange)
 {
     SnifferConfiguration config;
@@ -127,6 +127,7 @@ Network::getConnectedDevices(std::string iprange)
     std::thread sniff_thread([&]() { sniffer.sniff_loop(handler); });
     scanDevices(sender, iprange);
     sniff_thread.join();
+    return targets.size();
 }
 
 std::map<std::string, std::set<Dot11::address_type>>

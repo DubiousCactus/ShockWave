@@ -36,7 +36,7 @@ class Network
         void setBssid(const Tins::HWAddress<6> hwAddress);
         void connectAP();
         std::string getBssid();
-        void getConnectedDevices(std::string iprange);
+        int getConnectedDevices(std::string iprange);
         std::map<std::string, std::set<address_type>> getAccessPoints();
         void scanDevices(Tins::PacketSender& sender, std::string iprange);
         void startDeauth();
