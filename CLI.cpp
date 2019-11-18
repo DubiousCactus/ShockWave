@@ -2,7 +2,7 @@
 
 CLI::CLI()
 {
-    state = LISTHOSTS;
+    state = CHOOSEIF;
 }
 
 CLI::~CLI()
@@ -65,7 +65,7 @@ CLI::listAccessPoints()
             aps.erase(pair.first);
             continue;
         }
-        std::cout << i++ << ". " << pair.first << " -> [";
+        std::cout << ++i << ". " << pair.first << " -> [";
         for (std::set<address_type>::iterator it = pair.second.begin();
              it != pair.second.end();
              it++) {

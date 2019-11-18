@@ -101,6 +101,7 @@ Network::ipScanCallback(Tins::PDU& pdu)
     const IP& ip = pdu.rfind_pdu<IP>();
     const ICMP& icmp = pdu.rfind_pdu<ICMP>();
     if (icmp.type() == ICMP::ECHO_REPLY) {
+        //todo: don't add if already in the map
         std::cout << "\t-> " << ip.src_addr().to_string() << " ("
                   << eth.src_addr().to_string() << ")" << std::endl;
         targets.insert(std::pair<Tins::IPv4Address, Tins::HWAddress<6>>(
@@ -125,9 +126,7 @@ Network::getConnectedDevices(std::string iprange)
     ipScanning = true;
     std::thread sniff_thread([&]() { sniffer.sniff_loop(handler); });
     scanDevices(sender, iprange);
-    std::cout << "Done sending. Waiting for thread" << std::endl;
     sniff_thread.join();
-    std::cout << "Thread joined" << std::endl;
 }
 
 std::map<std::string, std::set<Dot11::address_type>>
@@ -138,15 +137,12 @@ Network::getAccessPoints()
     config.set_filter("type mgt subtype beacon");
     config.set_rfmon(true);
     Sniffer sniffer(spoofingIfaceName, config);
+    
+    scanning = true;
+    std::thread scanThread(&Network::stopScan, this);
+    scanThread.detach();
 
-    auto handler = bind(&Network::apScanCallback, this, std::placeholders::_1);
-    apScanning = true;
-    std::thread scan_thread([&]() { sniffer.sniff_loop(handler); });
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    std::cout << "Stopping the scan" << std::endl;
-    apScanning = false;
-    scan_thread.join();
-
+    sniffer.sniff_loop(make_sniffer_handler(this, &Network::apScanCallback));
     return accessPoints;
 }
 
@@ -178,9 +174,9 @@ Network::apScanCallback(PDU& pdu)
                         addresses.insert(addr);
                         accessPoints[ssid] = addresses;
                     } else {
-                        std::set<Dot11::address_type> address;
-                        address.insert(addr);
-                        accessPoints.insert(std::make_pair(ssid, address));
+                        std::set<Dot11::address_type> addresses;
+                        addresses.insert(addr);
+                        accessPoints.insert(std::make_pair(ssid, addresses));
                     }
                 }
             } catch (std::runtime_error&) {
@@ -188,8 +184,14 @@ Network::apScanCallback(PDU& pdu)
             }
         }
     }
+    return scanning;
+}
 
-    return apScanning;
+void
+Network::stopScan()
+{
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    scanning = false;
 }
 
 void
