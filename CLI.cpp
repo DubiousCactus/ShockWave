@@ -163,7 +163,7 @@ CLI::attack()
     network.startDeauth();
     do 
     {
-        std::cout << '\n' << "[*] Press enter to stop...";
+        std::cout << "[*] Press enter to stop...";
     } while (std::cin.get() != '\n');
     network.stopDeauth();
 }

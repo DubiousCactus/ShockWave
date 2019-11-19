@@ -22,10 +22,9 @@ class Network
         std::thread deauthThread;
         bool apScanCallback(Tins::PDU& pdu);
         bool ipScanCallback(Tins::PDU& pdu);
-        std::atomic<bool> scanning;
+        std::atomic<bool> apScanning;
         std::atomic<bool> deauthing;
         std::atomic<bool> ipScanning;
-        void stopScan();
         void sendDeauth();
 
     public:
